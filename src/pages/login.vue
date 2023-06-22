@@ -3,6 +3,7 @@ import { VForm } from 'vuetify/components'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import axios from '@axios'
+import axiosIns from "@axios";
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
@@ -18,11 +19,11 @@ import authV2MaskDark from '@/assets/images/pages/misc-mask-dark.png'
 import authV2MaskLight from '@/assets/images/pages/misc-mask-light.png'
 
 const authThemeImg = useGenerateImageVariant(authV2LoginIllustrationLight, authV2LoginIllustrationDark, authV2LoginIllustrationBorderedLight, authV2LoginIllustrationBorderedDark, true)
-const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
+// const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 const isPasswordVisible = ref(false)
 const route = useRoute()
 const router = useRouter()
-const ability = useAppAbility()
+// const ability = useAppAbility()
 
 const errors = ref({
   email: undefined,
@@ -30,29 +31,30 @@ const errors = ref({
 })
 
 const refVForm = ref()
-const email = ref('admin@demo.com')
-const password = ref('admin')
+// const email = ref('admin@demo.com')
+// const password = ref('admin')
+const email = ref('ali@gmail.com')
+const password = ref('1234')
+// localStorage.removeItem('userData')
+// localStorage.removeItem('accessToken')
 const rememberMe = ref(false)
 
 const login = () => {
-  axios.post('/auth/login', {
-    email: email.value,
-    password: password.value,
-  }).then(r => {
-    const { accessToken, userData, userAbilities } = r.data
-
-    localStorage.setItem('userAbilities', JSON.stringify(userAbilities))
-    ability.update(userAbilities)
-    localStorage.setItem('userData', JSON.stringify(userData))
-    localStorage.setItem('accessToken', JSON.stringify(accessToken))
+  axiosIns.post('/login?email=' + email.value + '&password=' + password.value).then(r => {
+    const { token, user } = r.data.data
+    const { profile } = r.data.data.user
+    // localStorage.setItem('userAbilities', JSON.stringify(userAbilities))
+    // ability.update(userAbilities)
+    localStorage.setItem('userData', JSON.stringify(user))
+    localStorage.setItem('userProfile', JSON.stringify(profile))
+    localStorage.setItem('accessToken', JSON.stringify(token))
 
     // Redirect to `to` query if exist or redirect to index route
     router.replace(route.query.to ? String(route.query.to) : '/')
   }).catch(e => {
-    const { errors: formErrors } = e.response.data
-
-    errors.value = formErrors
-    console.error(e.response.data)
+    const { errors: formErrors } = e.response.data.message
+    errors.value.password = formErrors
+    console.error(e.response.data.message)
   })
 }
 

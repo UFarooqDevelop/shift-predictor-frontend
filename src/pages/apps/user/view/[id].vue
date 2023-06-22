@@ -11,7 +11,7 @@ import avatar from '@/assets/images/avatars/avatar-1.png'
 
 const userListStore = useUserListStore()
 const route = useRoute()
-const userData = ref()
+const userData = ref(JSON.parse(localStorage.getItem('userData') || '{}'))
 const userTab = ref(null)
 
 const tabs = [
@@ -41,14 +41,17 @@ const userInfo = {
   postalCode : '12345',
   driver: 'Yes',
 }
+const reloadUserData = (data) => {
+  userData.value = data
+}
 </script>
 
 <template>
-  <VRow v-if="userInfo">
+  <VRow v-if="userData">
     <VCol
       cols="12"
     >
-      <UserBioPanel :user-data="userInfo" />
+      <UserBioPanel :user-data="userData" @update:user-data="reloadUserData" />
       <!--      <UserInfoCard :user-data="userData" /> -->
     </VCol>
   </VRow>

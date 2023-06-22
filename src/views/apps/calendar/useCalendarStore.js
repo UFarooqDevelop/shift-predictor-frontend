@@ -5,7 +5,7 @@ export const useCalendarStore = defineStore('calendar', {
   state: () => ({
     availableCalendars: [
       {
-        color: 'error',
+        color: 'success',
         label: 'Personal',
       },
       {

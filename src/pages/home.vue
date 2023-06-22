@@ -3,10 +3,16 @@ import UserTabSecurity from "@/views/apps/user/view/UserTabSecurity.vue"
 import UserTabOverview from "@/views/apps/user/view/UserTabOverview.vue"
 import CardAnalyticsTotalEarning from "@/views/pages/cards/card-analytics/CardAnalyticsTotalEarning.vue"
 import OverView from "@/views/pages/cards/over-view/OverView.vue"
-import UserAvatar from "@/assets/images/avatars/avatar-1.png"
+// import UserAvatar from "@/assets/images/avatars/avatar-1.png"
 import QualificationCharts from "@/views/pages/cards/qualifications/QualificationCharts.vue"
 import PreferencesChart from "@/views/pages/cards/preferences/PreferencesChart.vue"
+import {
+  avatarText,
+  kFormatter,
+} from '@core/utils/formatters'
 
+
+const userData = JSON.parse(localStorage.getItem('userData') || 'null')
 
 const userTab = ref(null)
 
@@ -34,7 +40,7 @@ const tabs = [
           cols="12"
           md="3"
           lg="2"
-          class="d-flex justify-center"
+          class="d-flex justify-end"
         >
           <VAvatar
             rounded
@@ -43,9 +49,15 @@ const tabs = [
             variant="tonal"
           >
             <VImg
-              v-if="UserAvatar"
-              :src="UserAvatar"
+              v-if="userData.avatar"
+              :src="userData.avatar"
             />
+<span
+              v-else
+              class="text-5xl font-weight-semibold"
+            >
+              {{ avatarText(userData.username) }}
+            </span>
           </VAvatar>
         </VCol>
         <VCol
@@ -55,11 +67,13 @@ const tabs = [
         >
           <VCardText>
             <h4 class="text-h4">
-              Ali
+<!--              {{ userData.name }}-->
+              {{ userData.username }}
             </h4>
 
-            <p class="text-body-2">
-              0912312312
+            <p class="text-body-4">
+<!--              0912312312-->
+            {{ userData?.reference }}
             </p>
           </VCardText>
         </VCol>

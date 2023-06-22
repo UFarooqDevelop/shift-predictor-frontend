@@ -1,4 +1,12 @@
 <script setup>
+import {
+  avatarText,
+  kFormatter,
+} from '@core/utils/formatters'
+import axios from "axios";
+import axiosIns from "@axios";
+import {requiredValidator, emailValidator} from '@core/utils/validators'
+
 const props = defineProps({
   userData: {
     type: Object,
@@ -18,23 +26,39 @@ const emit = defineEmits([
 
 const userData = ref(structuredClone(toRaw(props.userData)))
 const isUseAsBillingAddress = ref(false)
-
-watch(props, () => {
-  userData.value = structuredClone(toRaw(props.userData))
-})
+const token = ref(JSON.parse(localStorage.getItem('accessToken')))
+// Remove double quotes from the token string
+const tokenToSendForAuth = token.value.replace(/"/g, '');
+//
+// watch(props, () => {
+//   userData.value = structuredClone(toRaw(props.userData))
+// })
 
 const onFormSubmit = () => {
-  emit('update:modelValue', false)
-  emit('submit', userData.value)
+  emit('update:modelValue', userData.value)
+  // emit('submit', userData.value)
+  submit(JSON.parse(JSON.stringify(userData.value)))
 }
 
 const onFormReset = () => {
   userData.value = structuredClone(toRaw(props.userData))
-  emit('update:isDialogVisible', false)
+  emit('update:isDialogVisible', true)
 }
 
 const dialogModelValueUpdate = val => {
   emit('update:isDialogVisible', val)
+}
+
+const submit = (data) => {
+  axiosIns.post(`/profile/${data.profile.id}`, data.profile)
+    .then(response => {
+      localStorage.setItem('userData', JSON.stringify(data))
+      console.log(response)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  emit('submit', data)
 }
 
 const avatar = ref(1)
@@ -63,6 +87,7 @@ const avatar = ref(1)
         <!-- 👉 Form -->
         <VForm
           class="mt-6"
+          ref="editUserForm"
           @submit.prevent="onFormSubmit"
         >
           <VRow>
@@ -72,11 +97,25 @@ const avatar = ref(1)
             >
               <!-- 👉 Avatar -->
               <VImg
-                v-if="userData.avatar"
-                :src="userData.avatar"
+                v-if="userData?.profile?.picture"
+                :src="userData?.profile?.picture"
                 max-width="80"
                 max-height="80"
               />
+              <VAvatar
+                v-else
+                rounded
+                :size="80"
+                color="primary"
+                variant="tonal"
+              >
+                <span
+                  v-if="!userData?.profile?.picture"
+                  class="text-5xl font-weight-semibold"
+                >
+                  {{ avatarText(userData.username) }}
+                </span>
+              </VAvatar>
               <span id="inspire">
                 <VFileInput
                   v-model="avatar"
@@ -88,24 +127,25 @@ const avatar = ref(1)
                 />
               </span>
             </VCol>
-            <!-- 👉 Reference Id -->
-            <VCol
-              cols="12"
-              md="6"
-            >
-              <VTextField
-                v-model="userData.reference"
-                label="Reference Id"
-              />
-            </VCol>
+<!--            &lt;!&ndash; 👉 Reference Id &ndash;&gt;-->
+<!--            <VCol-->
+<!--              cols="12"-->
+<!--              md="6"-->
+<!--            >-->
+<!--              <VTextField-->
+<!--                v-model="userData.reference"-->
+<!--                label="Reference Id"-->
+<!--              />-->
+<!--            </VCol>-->
             <!-- 👉 Name -->
             <VCol
               cols="12"
               md="6"
             >
               <VTextField
-                v-model="userData.name"
-                label="first Name"
+                v-model="userData.username"
+                label="Name"
+                :rules="[requiredValidator]"
               />
             </VCol>
             <!-- 👉 Email -->
@@ -116,6 +156,7 @@ const avatar = ref(1)
               <VTextField
                 v-model="userData.email"
                 label="Email"
+                :rules="[requiredValidator, emailValidator]"
               />
             </VCol>
 
@@ -125,7 +166,7 @@ const avatar = ref(1)
               md="6"
             >
               <VTextField
-                v-model="userData.phone"
+                v-model="userData.profile.phone_number"
                 label="Contact"
               />
             </VCol>

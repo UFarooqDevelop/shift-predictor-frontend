@@ -13,12 +13,11 @@ const router = createRouter({
       path: '/',
       redirect: to => {
         const userData = JSON.parse(localStorage.getItem('userData') || '{}')
-        const userRole = userData && userData.role ? userData.role : null
-        if (userRole === 'admin')
+        // const userRole = userData && userData.role ? userData.role : null
+        const userRole = userData ? 'admin' : null
+        if (userData && userRole) {
           return { name: 'home' }
-        if (userRole === 'client')
-          return { name: 'access-control' }
-        
+          }
         return { name: 'login', query: to.query }
       },
     },
@@ -31,9 +30,18 @@ const router = createRouter({
 
 
 // Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
-router.beforeEach(to => {
+router.beforeEach((to, from, next)  => {
   const isLoggedIn = isUserLoggedIn()
-
+  if (isLoggedIn) {
+    next();
+  } else {
+    if (to.name !== 'login') {
+      next({ name: 'login', query: { to: to.name !== 'home' ? to.fullPath : undefined } });
+    }
+    else {
+        next();
+    }
+  }
   /*
   
     ℹ️ Commented code is legacy code
@@ -55,15 +63,22 @@ router.beforeEach(to => {
     return next()
   
     */
-  if (canNavigate(to)) {
-    if (to.meta.redirectIfLoggedIn && isLoggedIn)
-      return '/'
-  }
-  else {
-    if (isLoggedIn)
-      return { name: 'not-authorized' }
-    else
-      return { name: 'login', query: { to: to.name !== 'index' ? to.fullPath : undefined } }
-  }
+  // if (isLoggedIn){
+  //     return '/'
+  // }
+  //   else {
+  //       return { name: 'login', query: { to: to.name !== 'index' ? to.fullPath : undefined } }
+  // }
+  // if (canNavigate(to)) {
+  //   // to.meta.redirectIfLoggedIn &&
+  //   if (to.meta.redirectIfLoggedIn && isLoggedIn)
+  //     return '/'
+  // }
+  // else {
+  //   if (isLoggedIn)
+  //     return { name: 'not-authorized' }
+  //   else
+  //     return { name: 'login', query: { to: to.name !== 'index' ? to.fullPath : undefined } }
+  // }
 })
 export default router

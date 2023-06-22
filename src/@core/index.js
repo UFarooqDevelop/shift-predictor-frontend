@@ -20,7 +20,7 @@ export const defineThemeConfig = userConfig => {
     themeConfig: {
       app: {
         title: userConfig.app.title,
-        logo: userConfig.app.logo,
+        // logo: userConfig.app.logo,
         contentWidth: ref(userConfig.app.contentWidth),
         contentLayoutNav: ref(userConfig.app.contentLayoutNav),
         overlayNavFromBreakpoint: userConfig.app.overlayNavFromBreakpoint,

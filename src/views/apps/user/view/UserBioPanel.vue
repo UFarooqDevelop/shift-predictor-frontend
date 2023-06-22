@@ -3,76 +3,38 @@ import {
   avatarText,
   kFormatter,
 } from '@core/utils/formatters'
-
+import UserInfoEditDialog from "@core/components/UserInfoEditDialog.vue";
 const props = defineProps({
   userData: {
     type: Object,
     required: true,
   },
 })
-
-const standardPlan = {
-  plan: 'Standard',
-  price: 99,
-  benefits: [
-    '10 Users',
-    'Up to 10GB storage',
-    'Basic Support',
-  ],
+const emit = defineEmits(['update:user-data'])
+const reload = (data) => {
+  console.log(data)
+  // window.location.reload()
+  emit('update:user-data', data)
 }
+// props.userData = computed(() => JSON.parse(localStorage.getItem('userData') || 'null'))
+// watch(props, () => {
+//   props.userData = JSON.parse(localStorage.getItem('userData') || 'null')
+// })
 
 const isUserInfoEditDialogVisible = ref(false)
 const isUpgradePlanDialogVisible = ref(false)
 
-const resolveUserStatusVariant = stat => {
-  if (stat === 'pending')
-    return 'warning'
-  if (stat === 'active')
-    return 'success'
-  if (stat === 'inactive')
-    return 'secondary'
-  
-  return 'primary'
-}
-
-const resolveUserRoleVariant = role => {
-  if (role === 'subscriber')
-    return {
-      color: 'warning',
-      icon: 'tabler-user',
-    }
-  if (role === 'author')
-    return {
-      color: 'success',
-      icon: 'tabler-circle-check',
-    }
-  if (role === 'maintainer')
-    return {
-      color: 'primary',
-      icon: 'tabler-chart-pie-2',
-    }
-  if (role === 'editor')
-    return {
-      color: 'info',
-      icon: 'tabler-pencil',
-    }
-  if (role === 'admin')
-    return {
-      color: 'secondary',
-      icon: 'tabler-server-2',
-    }
-  
-  return {
-    color: 'primary',
-    icon: 'tabler-user',
-  }
-}
 </script>
 
 <template>
-  <VRow>
+  <VRow class="d-flex justify-center">
     <!-- SECTION User Details -->
-    <VCol cols="12">
+    <VCol cols="12"
+          lg="8"
+          xl="9"
+          sm="12"
+          md="12"
+    >
       <VCard v-if="props.userData">
         <VCardText class="text-center pt-15">
           <!-- 👉 Avatar -->
@@ -83,20 +45,22 @@ const resolveUserRoleVariant = role => {
             variant="tonal"
           >
             <VImg
-              v-if="props.userData.avatar"
-              :src="props.userData.avatar"
+              v-if="props.userData?.profile?.picture"
+              :src="props.userData?.profile?.picture"
             />
             <span
               v-else
               class="text-5xl font-weight-semibold"
             >
-              {{ avatarText(props.userData.name) }}
+              {{avatarText(props.userData.username) }}
+<!--              {{ avatarText(props.userData.first_name) }}{{ avatarText(props.userData.last_name) }}-->
             </span>
           </VAvatar>
 
           <!-- 👉 User fullName -->
           <h6 class="text-h6 mt-4">
-            {{ props.userData.name }}
+            {{ props.userData.username }}
+<!--            {{ props.userData.first_name }} {{ props.userData.last_name }}-->
           </h6>
         </VCardText>
 
@@ -128,7 +92,8 @@ const resolveUserRoleVariant = role => {
                     Name:
                     <span class="ml-lg-15" />
                     <span class="text-body-2 ml-lg-8">
-                      {{ props.userData.name }}
+                      {{ props.userData.username }}
+<!--                      {{ props.userData.first_name }} {{ props.userData.last_name }}-->
                     </span>
                   </h6>
                 </VListItemTitle>
@@ -150,51 +115,51 @@ const resolveUserRoleVariant = role => {
                     Phone:
                     <span class="ml-lg-15" />
                     <span class="text-body-2 ml-lg-7">
-                      {{ props.userData.phone }}
+                      {{ props.userData?.profile?.phone_number }}
                     </span>
                   </h6>
                 </VListItemTitle>
               </VListItem>
-              <VListItem>
-                <VListItemTitle>
-                  <h6 class="text-base font-weight-semibold w-25">
-                    Address:
-                    <span class="ml-lg-15" />
-                    <span class="text-body-2 ml-lg-3">
-                      {{ props.userData.address }}
-                    </span>
-                  </h6>
-                </VListItemTitle>
-              </VListItem>
-              <VListItem>
-                <VListItemTitle>
-                  <h6 class="text-base font-weight-semibold w-25">
-                    City:
-                    <span class="ml-lg-15" />
-                    <span class="text-body-2 ml-lg-11">
-                      {{ props.userData.city }}
-                    </span>
-                  </h6>
-                </VListItemTitle>
-              </VListItem>
-              <VListItem>
-                <VListItemTitle>
-                  <h6 class="text-base font-weight-semibold w-25">
-                    Postal Code:
-                    <span class="ml-lg-11" />
-                    <span class="text-body-2">
-                      {{ props.userData.postalCode }}
-                    </span>
-                  </h6>
-                </VListItemTitle>
-              </VListItem>
+<!--              <VListItem>-->
+<!--                <VListItemTitle>-->
+<!--                  <h6 class="text-base font-weight-semibold w-25">-->
+<!--                    Address:-->
+<!--                    <span class="ml-lg-15" />-->
+<!--                    <span class="text-body-2 ml-lg-3">-->
+<!--                      {{ props.userData.address }}-->
+<!--                    </span>-->
+<!--                  </h6>-->
+<!--                </VListItemTitle>-->
+<!--              </VListItem>-->
+<!--              <VListItem>-->
+<!--                <VListItemTitle>-->
+<!--                  <h6 class="text-base font-weight-semibold w-25">-->
+<!--                    City:-->
+<!--                    <span class="ml-lg-15" />-->
+<!--                    <span class="text-body-2 ml-lg-11">-->
+<!--                      {{ props.userData.city }}-->
+<!--                    </span>-->
+<!--                  </h6>-->
+<!--                </VListItemTitle>-->
+<!--              </VListItem>-->
+<!--              <VListItem>-->
+<!--                <VListItemTitle>-->
+<!--                  <h6 class="text-base font-weight-semibold w-25">-->
+<!--                    Postal Code:-->
+<!--                    <span class="ml-lg-11" />-->
+<!--                    <span class="text-body-2">-->
+<!--                      {{ props.userData.postalCode }}-->
+<!--                    </span>-->
+<!--                  </h6>-->
+<!--                </VListItemTitle>-->
+<!--              </VListItem>-->
               <VListItem>
                 <VListItemTitle>
                   <h6 class="text-base font-weight-semibold w-25">
                     Driver:
                     <span class="ml-lg-15" />
                     <span class="text-body-2 ml-lg-8">
-                      {{ props.userData.driver }}
+                      {{ props.userData?.profile?.is_driver ? 'Yes' : 'No' }}
                     </span>
                   </h6>
                 </VListItemTitle>
@@ -302,6 +267,8 @@ const resolveUserRoleVariant = role => {
   <UserInfoEditDialog
     v-model:isDialogVisible="isUserInfoEditDialogVisible"
     :user-data="props.userData"
+    @submit="isUserInfoEditDialogVisible = false"
+    @update:modelValue="reload"
   />
 
   <!-- 👉 Upgrade plan dialog -->

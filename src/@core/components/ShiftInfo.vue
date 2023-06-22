@@ -1,4 +1,6 @@
 <script setup>
+import axiosIns from "@axios";
+
 const props = defineProps({
   shiftData: {
     type: Object,
@@ -21,17 +23,36 @@ const shiftData = ref(structuredClone(toRaw(props.shiftData)))
 watch(props, () => {
   shiftData.value = structuredClone(toRaw(props.shiftData))
 })
-
-const onFormSubmit = () => {
-  emit('update:modelValue', false)
-  emit('submit', shiftData.value)
+const startAndEndTime= computed(() => (shiftData.value?.start_time || 'N/A') + ' - ' + (shiftData.value?.end_time || 'N/A'))
+const isLiked = ref(false)
+const isDisliked = ref(false)
+const enjoyementRatingError = ref('')
+const status = computed(() => shiftData.value?.us_action === 1 ? 'Active' : 'Inactive')
+const submitForm = (actionType) => {
+  axiosIns.post('recomended_shifts/'+shiftData.value.id, {
+    ...(shiftData.value || {}),
+    us_action: actionType,
+    enjoyment_rating: isLiked.value ? 1 : isDisliked.value ? 0 : 0
+  }).then(response => {
+    emit( 'update:isDialogVisible', false)
+    emit('submit', shiftData.value)
+  }).catch(error => {
+    console.log(error)
+  })
 }
-
+const isPastAndAcceptedShift = (shift) => {
+  const shiftDayArr = shift?.shift_date?.split('-')
+  const shiftDay = shiftDayArr?.[shiftDayArr?.length - 1] ? parseInt(shiftDayArr?.[shiftDayArr?.length - 1]) : 0
+  console.log(new Date().getHours(), parseInt(shift?.end_time?.split(':')[0]), shiftDay)
+  return shift?.us_action === 1 && (shiftDay < new Date().getDate() ? parseInt(shift?.end_time?.split(':')[0]) < new Date().getHours() ? true : true : false)
+}
 const onFormReset = () => {
   shiftData.value = structuredClone(toRaw(props.shiftData))
   emit('update:isDialogVisible', false)
 }
+const acceptShift = () => {
 
+}
 const dialogModelValueUpdate = val => {
   emit('update:isDialogVisible', val)
 }
@@ -40,7 +61,7 @@ const dialogModelValueUpdate = val => {
 <template>
   <VDialog
     :width="$vuetify.display.smAndDown ? 'auto' : 700"
-    :model-value="props.isDialogVisible"
+    :model-value="isDialogVisible"
     @update:model-value="dialogModelValueUpdate"
   >
     <!-- Dialog close btn -->
@@ -57,7 +78,6 @@ const dialogModelValueUpdate = val => {
         <!-- 👉 Form -->
         <VForm
           class="mt-6"
-          @submit.prevent="onFormSubmit"
         >
           <VRow>
             <VCol
@@ -66,8 +86,9 @@ const dialogModelValueUpdate = val => {
               lg="4"
             >
               <VTextField
-                v-model="shiftData.location"
+                v-model="shiftData.location.address"
                 label="Location"
+                readonly
               />
             </VCol>
             <!-- 👉 date -->
@@ -77,8 +98,9 @@ const dialogModelValueUpdate = val => {
               lg="4"
             >
               <VTextField
-                v-model="shiftData.date"
+                v-model="shiftData.shift_date"
                 label="Date"
+                readonly
               />
             </VCol>
             <!-- 👉 start and end time -->
@@ -88,8 +110,9 @@ const dialogModelValueUpdate = val => {
               lg="4"
             >
               <VTextField
-                v-model="shiftData.time"
+                v-model="startAndEndTime"
                 label="Start/End Time"
+                readonly
               />
             </VCol>
             <!--            status -->
@@ -98,45 +121,51 @@ const dialogModelValueUpdate = val => {
               md="6"
             >
               <VTextField
-                v-model="shiftData.status"
+                v-model="status"
                 label="Status"
+                readonly
               />
             </VCol>
 
-            <VCol cols="12">
+            <VCol v-if="isPastAndAcceptedShift(shiftData)" cols="12">
               <VCardText
-                class=""
+                class="pa-0 pb-2"
               >
                 Did you enjoy this shift?
                 <VCol cols="12">
                     <VIcon
                       class="mr-2"
-                      color="primary"
+                      :color="isLiked ? 'primary' : 'grey'"
                       icon="mdi-thumbs-up"
+                      @click="isLiked = !isLiked , isDisliked = false"
                     />
                     <VIcon
                       class="mr-2"
-                      color="primary"
+                      :color="isDisliked ? 'primary' : 'grey'"
                       icon="mdi-thumb-down"
+                      @click="isDisliked = !isDisliked , isLiked = false"
                     />
                 </VCol>
-              </vcardtext>
+                <VCol v-if="enjoyementRatingError" class="mt-0 pt-0 text-error" style="font-weight: 600" cols="12">
+                  <span>{{ enjoyementRatingError }}</span>
+                </VCol>
+              </VCardText>
             </VCol>
             <!-- 👉 Submit and Cancel -->
             <VCol
               cols="12"
               class="d-flex flex-wrap justify-start gap-4"
             >
-              <VBtn type="submit">
+              <VBtn @click.stop="submitForm(1)">
                 Accept
               </VBtn>
 
               <VBtn
-                @click="onFormReset"
+                @click="submitForm(2)"
               >
                 Reject
               </VBtn>
-              <VBtn>
+              <VBtn @click="submitForm(3)">
                 Not Interested
               </VBtn>
             </VCol>

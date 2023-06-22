@@ -9,16 +9,21 @@ import Calendar from "@/pages/apps/calendar.vue"
   <VRow>
     <VCol
       cols="12"
-      class="d-flex flex-row pa-0"
+      class="d-lg-flex flex-lg-row pa-0"
     >
       <!-- SECTION User Details -->
       <VCol
-        cols="6"
+        cols="12"
+        lg="6"
+        md="12"
       >
         <UserInfoCard />
       </VCol>
       <VDivider class="mx-2" />
-      <VCol cols="6">
+      <VCol cols="12"
+            lg="6"
+            md="12"
+      >
         <VCard>
           <VRow>
             <VCol cols="12">

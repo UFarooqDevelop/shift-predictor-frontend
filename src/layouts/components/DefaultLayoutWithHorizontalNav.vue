@@ -44,10 +44,10 @@ const { appRouteTransition } = useThemeConfig()
           size="24"
         />
       </VBtn>
-      <NavBarI18n />
-      <NavbarThemeSwitcher />
-      <NavbarShortcuts />
-      <NavBarNotifications class="me-2" />
+<!--      <NavBarI18n />-->
+<!--      <NavbarThemeSwitcher />-->
+<!--      <NavbarShortcuts />-->
+<!--      <NavBarNotifications class="me-2" />-->
       <UserProfile />
     </template>
 
@@ -64,12 +64,12 @@ const { appRouteTransition } = useThemeConfig()
       </Transition>
     </RouterView>
 
-    <!-- 👉 Footer -->
-    <template #footer>
-      <Footer />
-    </template>
+<!--    &lt;!&ndash; 👉 Footer &ndash;&gt;-->
+<!--    <template #footer>-->
+<!--      <Footer />-->
+<!--    </template>-->
 
-    <!-- 👉 Customizer -->
-    <TheCustomizer />
+<!--    &lt;!&ndash; 👉 Customizer &ndash;&gt;-->
+<!--    <TheCustomizer />-->
   </HorizontalNavLayout>
 </template>

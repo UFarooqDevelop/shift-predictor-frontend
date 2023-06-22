@@ -33,4 +33,3 @@ npm run dev
 ```sh
 npm run build
 ```
-# shift-predictor-frontend

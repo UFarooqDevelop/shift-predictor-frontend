@@ -10,7 +10,7 @@ const logout = () => {
 
   // Remove "userData" from localStorage
   localStorage.removeItem('userData')
-
+  localStorage.removeItem('userProfile')
   // Remove "accessToken" from localStorage
   localStorage.removeItem('accessToken')
   router.push('/login').then(() => {
@@ -26,7 +26,7 @@ const logout = () => {
 
 <template>
   <div class="d-flex align-center gap-2">
-    <span class="text-lg-caption">Ali | </span>
+    <span class="text-lg-heading"> {{ userData.username }} | </span>
     <VBadge
       dot
       location="bottom right"
@@ -86,7 +86,8 @@ const logout = () => {
               </template>
 
               <VListItemTitle class="font-weight-semibold">
-                {{ userData.fullName }}
+<!--                {{ userData.fullName }} -->
+                    {{ userData.username }}
               </VListItemTitle>
               <!--              <VListItemSubtitle>{{ userData.role }}</VListItemSubtitle> -->
             </VListItem>
@@ -94,7 +95,7 @@ const logout = () => {
             <VDivider class="my-2" />
 
             <!-- 👉 Profile -->
-            <VListItem :to="{ name: 'apps-user-view-id', params: { id: 21 } }">
+            <VListItem :to="{ name: 'apps-user-view-id', params: { id: userData.id } }">
               <template #prepend>
                 <VIcon
                   class="me-2"

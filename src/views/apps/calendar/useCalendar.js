@@ -4,6 +4,8 @@ import listPlugin from '@fullcalendar/list'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import { useCalendarStore } from '@/views/apps/calendar/useCalendarStore'
+import axiosIns from "@axios";
+import moment from "moment";
 
 export const blankEvent = {
   title: '',
@@ -35,11 +37,8 @@ export const useCalendar = (event, isEventHandlerSidebarActive, isLeftSidebarOpe
 
   // 👉 Calendar colors
   const calendarsColor = {
-    Business: 'primary',
-    Holiday: 'success',
-    Personal: 'error',
-    Family: 'warning',
-    ETC: 'info',
+    accepted: 'success',
+    completed: 'info'
   }
 
 
@@ -69,15 +68,30 @@ export const useCalendar = (event, isEventHandlerSidebarActive, isLeftSidebarOpe
     // If there's no info => Don't make useless API call
     if (!info)
       return
-    store.fetchEvents()
-      .then(r => {
-        successCallback(r.data.map(e => ({
-          ...e,
-
-          // Convert string representation of date to Date object
-          start: new Date(e.start),
-          end: new Date(e.end),
-        })))
+  axiosIns('/rota').then(r => {
+        successCallback(r?.data?.data?.map(e => {
+          console.log(e?.recomended_shifts?.start_time?.split(':'))
+          const start_date = e?.recomended_shifts?.shift_date?.split('-')
+          const start_time = e?.recomended_shifts?.start_time?.split(':')
+          const end_time = e?.recomended_shifts?.end_time?.split(':')
+          const title = e?.recomended_shifts?.location?.address || 'Anyomous'
+              console.log(start_date, start_time, end_time,e?.recomended_shifts?.us_action)
+          const entry_color = e?.recomended_shifts?.us_action === 1 ? 'accepted' : 'completed'
+          if(!start_date || !start_time || !end_time) return
+          return {
+            ...e,
+            // Convert string representation of date to Date object
+            // moment([2021,1,20,5,20]);
+            title: title,
+            start: moment([start_date[0], start_date[1] - 1, start_date[2], start_time[0], start_time[1]]).toDate(),
+            end: moment([start_date[0], start_date[1] - 1, start_date[2], end_time[0], end_time[1]]).toDate(),
+            allDay: true,
+            extendedProps: {
+                calendar: entry_color,
+            }
+          }
+        })
+        .filter(Boolean))
       })
       .catch(e => {
         console.error('Error occurred while fetching calendar events', e)
