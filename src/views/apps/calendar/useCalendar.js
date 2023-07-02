@@ -76,7 +76,7 @@ export const useCalendar = (event, isEventHandlerSidebarActive, isLeftSidebarOpe
           const end_time = e?.recomended_shifts?.end_time?.split(':')
           const title = e?.recomended_shifts?.location?.address || 'Anyomous'
               console.log(start_date, start_time, end_time,e?.recomended_shifts?.us_action)
-          const entry_color = e?.recomended_shifts?.us_action === 1 ? 'accepted' : 'completed'
+          const entry_color = e?.recomended_shifts?.enjoyment_rating > 0 ? 'completed' : 'accepted'
           if(!start_date || !start_time || !end_time) return
           return {
             ...e,

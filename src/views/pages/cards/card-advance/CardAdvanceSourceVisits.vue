@@ -136,10 +136,10 @@ function getRecommendedList() {
             {{ shift?.location?.address ? shift?.location?.address : '' }}
           </VListItemTitle>
           <VListItemSubtitle>
-            {{ shift?.shift_date ? moment(shift?.shift_date).format('DD/MM/YYYY') : '' }} @ {{ shift?.start_time ? shift?.start_time : '' }}
+            Scheduled at:  {{ shift?.shift_date ? moment(shift?.shift_date).format('DD/MM/YYYY') : '' }} @ {{ shift?.start_time ? shift?.start_time : '' }}
           </VListItemSubtitle>
           <VListItemSubtitle>
-            {{ shift?.updated_at ? moment(shift?.updated_at).format('DD/MM/YYYY') : '' }}
+            Last updated:   {{ shift?.updated_at ? moment(shift?.updated_at).format('DD/MM/YYYY') : '' }}
           </vlistitemsubtitle>
         </VListItem>
       </VList>

@@ -27,7 +27,7 @@ const userInfo = ref(JSON.parse(localStorage.getItem('userData')) || {})
               Reference:
               <span class="ml-lg-15" />
               <span class="text-body-2">
-                {{ userInfo.reference }}
+                {{ userInfo.profile.reference }}
               </span>
             </h6>
           </VListItemTitle>

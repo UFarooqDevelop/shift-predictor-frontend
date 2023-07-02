@@ -33,10 +33,11 @@ const submitForm = (actionType) => {
   axiosIns.post('recomended_shifts/'+shiftData.value.id, {
     ...(shiftData.value || {}),
     us_action: actionType,
-    enjoyment_rating: isLiked.value ? 1 : isDisliked.value ? 0 : 0
+    enjoyment_rating: isLiked.value ? 1 : isDisliked.value ? 2 : 0
   }).then(response => {
     emit( 'update:isDialogVisible', false)
     emit('submit', shiftData.value)
+    window.location.reload();
   }).catch(error => {
     console.log(error)
   })
@@ -57,6 +58,11 @@ const acceptShift = () => {
 const dialogModelValueUpdate = val => {
   emit('update:isDialogVisible', val)
 }
+watch([isLiked, isDisliked], () => {
+  if ((isLiked.value || isDisliked.value) && shiftData.value.us_action === 1) {
+    submitForm(1)
+  }
+})
 
 </script>
 
@@ -137,15 +143,15 @@ const dialogModelValueUpdate = val => {
                 <VCol cols="12">
                     <VIcon
                       class="mr-2"
-                      :color="isLiked ? 'primary' : 'grey'"
+                      :color="shiftData.enjoyment_rating === 1 ? 'primary' : 'grey'"
                       icon="mdi-thumbs-up"
                       @click="isLiked = !isLiked , isDisliked = false"
                     />
                     <VIcon
                       class="mr-2"
-                      :color="isDisliked ? 'primary' : 'grey'"
+                      :color="shiftData.enjoyment_rating === 2  ? 'primary' : 'grey'"
                       icon="mdi-thumb-down"
-                      @click="isDisliked = !isDisliked , isLiked = false"
+                      @click="isDisliked = 2 , isLiked = false"
                     />
                 </VCol>
                 <VCol v-if="enjoyementRatingError" class="mt-0 pt-0 text-error" style="font-weight: 600" cols="12">

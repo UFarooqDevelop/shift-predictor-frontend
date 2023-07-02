@@ -14,7 +14,7 @@ import {
 import authV2LoginIllustrationBorderedDark from '@/assets/images/pages/auth-v2-login-illustration-bordered-dark.png'
 import authV2LoginIllustrationBorderedLight from '@/assets/images/pages/auth-v2-login-illustration-bordered-light.png'
 import authV2LoginIllustrationDark from '@/assets/images/pages/auth-v2-login-illustration-dark.png'
-import authV2LoginIllustrationLight from '@/assets/images/pages/auth-v2-login-illustration-light.png'
+import authV2LoginIllustrationLight from '@/assets/images/pages/auth-v2-login-illustration-light.jpg'
 import authV2MaskDark from '@/assets/images/pages/misc-mask-dark.png'
 import authV2MaskLight from '@/assets/images/pages/misc-mask-light.png'
 
