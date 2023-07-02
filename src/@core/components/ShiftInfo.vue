@@ -1,6 +1,6 @@
 <script setup>
 import axiosIns from "@axios";
-
+import moment from "moment";
 const props = defineProps({
   shiftData: {
     type: Object,
@@ -28,6 +28,7 @@ const isLiked = ref(false)
 const isDisliked = ref(false)
 const enjoyementRatingError = ref('')
 const status = computed(() => shiftData.value?.us_action === 1 ? 'Active' : 'Inactive')
+const formatedDate = computed(() =>   moment(new Date(shiftData.value?.shift_date)).isValid()===true ? moment(shiftData.value?.shift_date).format("DD/MM/YYYY"):'' )
 const submitForm = (actionType) => {
   axiosIns.post('recomended_shifts/'+shiftData.value.id, {
     ...(shiftData.value || {}),
@@ -56,6 +57,7 @@ const acceptShift = () => {
 const dialogModelValueUpdate = val => {
   emit('update:isDialogVisible', val)
 }
+
 </script>
 
 <template>
@@ -98,7 +100,7 @@ const dialogModelValueUpdate = val => {
               lg="4"
             >
               <VTextField
-                v-model="shiftData.shift_date"
+                v-model="formatedDate"
                 label="Date"
                 readonly
               />

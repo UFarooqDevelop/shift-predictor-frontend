@@ -27,6 +27,7 @@ import Calendar from "@/pages/apps/calendar.vue"
         <VCard>
           <VRow>
             <VCol cols="12">
+               
               <CardAdvanceSourceVisits />
             </VCol>
           </VRow>
@@ -34,6 +35,7 @@ import Calendar from "@/pages/apps/calendar.vue"
       </VCol>
     </VCol>
     <VCol cols="12">
+     
       <Calendar />
     </VCol>
   </VRow>

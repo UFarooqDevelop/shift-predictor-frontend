@@ -92,20 +92,19 @@ const logout = () => {
               <!--              <VListItemSubtitle>{{ userData.role }}</VListItemSubtitle> -->
             </VListItem>
 
-            <VDivider class="my-2" />
 
-            <!-- 👉 Profile -->
+            <!-- 👉 Profile 
             <VListItem :to="{ name: 'apps-user-view-id', params: { id: userData.id } }">
-              <template #prepend>
-                <VIcon
+                 <template #prepend>
+             <VIcon
                   class="me-2"
                   icon="tabler-user"
                   size="22"
                 />
-              </template>
+              </template> 
 
-              <VListItemTitle>Profile</VListItemTitle>
-            </VListItem>
+           <VListItemTitle>Profile</VListItemTitle>
+            </VListItem>-->
 
             <VDivider class="my-2" />
 

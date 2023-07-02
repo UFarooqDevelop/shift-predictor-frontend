@@ -13,6 +13,8 @@ import { abilitiesPlugin } from '@casl/vue'
 import '@core/scss/template/index.scss'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
+import moment from 'moment'
+
 
 loadFonts()
 
@@ -20,6 +22,17 @@ loadFonts()
 // Create vue app
 const app = createApp(App)
 
+/**
+* @params {date} date to be converted to timeago
+* @returns returns timeAgo
+*/
+app.config.globalProperties.$filters = {
+  CustomFormatDate(date) {
+    if(moment(new Date(date)).isValid()===true)
+      return moment(date).format("DD/MM/YYYY");
+    
+  },
+  }
 
 // Use plugins
 app.use(vuetify)

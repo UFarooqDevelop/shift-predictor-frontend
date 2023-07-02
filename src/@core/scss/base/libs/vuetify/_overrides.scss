@@ -26,6 +26,29 @@ h6,
 .v-card-title {
   color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
 }
+.v-card-title , .fc-toolbar-title {
+  color: #0844a4 !important;
+    font-weight: bold !important;
+}
+.layout-wrapper.layout-nav-type-vertical:not(.layout-overlay-nav) .layout-content-wrapper{
+  padding-left: 0px !important;
+}
+.fc-button-primary , .fc-button-primary:active, , .fc-button-primary:focus{
+  background: none !important;
+  color: #0844a4 !important;
+  padding: 10px !important;
+  border: none !important;
+  margin: 0px !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.fc-direction-ltr .fc-toolbar > * > :not(:first-child){
+  margin-left: 0px !important;
+}
+.fc-button-primary span , .fc-button-primary span:focus{
+  vertical-align: top !important;
+  outline: none !important;
+}
 
 .v-application,
 .text-body-1,

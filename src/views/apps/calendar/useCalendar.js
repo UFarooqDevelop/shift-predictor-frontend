@@ -185,8 +185,8 @@ export const useCalendar = (event, isEventHandlerSidebarActive, isLeftSidebarOpe
     plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin, listPlugin],
     initialView: 'dayGridMonth',
     headerToolbar: {
-      start: 'drawerToggler,prev,next title',
-      end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth',
+      start: '',
+      end: 'drawerToggler,prev title,next',
     },
     events: fetchEvents,
 

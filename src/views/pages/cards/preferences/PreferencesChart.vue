@@ -115,7 +115,7 @@ function getPreferences() {
       myPreferences.value = response.data.data?.[0]
       preferredLocation.value = response.data?.data[0]?.preferred_locations?.split(',')?.map((id) => locations.value.find((location) => location.id === parseInt(id)))?.filter(Boolean)
       preferredTowns.value = response.data?.data[0]?.preferred_towns?.split(',')?.map((id) => towns.value.find((town) => town.id === parseInt(id)))?.filter(Boolean)
-      lastUpdated.value = response.data.data[0].updated_at ? moment(response.data.data[0].updated_at).format('YYYY/MM/DD') : moment(response.data.data[0].created_at).format('YYYY/MM/DD')
+      lastUpdated.value = response.data.data[0].updated_at ? moment(response.data.data[0].updated_at).format('DD/MM/YYYY') : moment(response.data.data[0].created_at).format('DD/MM/YYYY')
       formatData(response.data.data)
     })
     .catch(error => {
@@ -234,8 +234,11 @@ const submitPreferences = () => {
     <VSpacer/>
     <VRow class="pa-5">
       <VCol cols="4">
-        <v-select
-          label="Preferred Location"
+        <v-text>
+          Preferred Location
+          </v-text>
+<v-select
+          label=""
           v-model="preferredLocation"
           :items="locations"
           item-value="id"
@@ -246,22 +249,28 @@ const submitPreferences = () => {
         ></v-select>
       </VCol>
       <VCol cols="4">
+        <v-text>
+          Preferred Towns
+          </v-text>
         <VSelect
           v-model="preferredTowns"
           :items="towns"
           item-title="town"
           item-value="id"
-          label="Preferred Towns"
+          label=""
           outlined
           multiple
           clearable
         />
       </VCol>
       <VCol cols="4">
+        <v-text>
+          Last Updated
+          </v-text>
         <VTextField
           v-model="lastUpdated"
           readonly
-          placeholder="Last Updated"
+          placeholder=""
           outlined
         />
       </VCol>

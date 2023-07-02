@@ -119,7 +119,7 @@ function getQualificationTable(){
             <div class="d-flex align-center">
               <div>
                 <p class="text-base mb-0">
-                  {{ qualification?.created_at?.split('T')[0] }}
+                  {{ $filters.CustomFormatDate(qualification?.created_at?.split('T')[0]) }}
                 </p>
               </div>
             </div>
@@ -128,7 +128,7 @@ function getQualificationTable(){
             <div class="d-flex align-center">
               <div>
                 <p class="text-base mb-0">
-                  {{ qualification.expiry_date }}
+                  {{ $filters.CustomFormatDate(qualification.expiry_date) }}
                 </p>
               </div>
             </div>
