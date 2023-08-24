@@ -203,7 +203,7 @@ const submitPreferences = () => {
     Saturday,
     Sunday
   }
-  if (myPreferences.value?.id) {
+  if (!myPreferences.value?.id) {
   axiosIns.post('my_preferencs/' + myPreferences.value?.id, data)
     .then((res) => {
       alert('Preferences updated successfully')
