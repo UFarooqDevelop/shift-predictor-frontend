@@ -49,8 +49,8 @@ const tabs = [
             variant="tonal"
           >
             <VImg
-              v-if="userData.avatar"
-              :src="userData.avatar"
+            v-if="userData?.profile?.picture"
+              :src="'data:image/jpeg;base64,'+userData?.profile?.picture"
             />
 <span
               v-else

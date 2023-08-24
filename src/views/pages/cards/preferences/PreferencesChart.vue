@@ -203,11 +203,12 @@ const submitPreferences = () => {
     Saturday,
     Sunday
   }
-  if (!myPreferences.value?.id) {
+  if (myPreferences.value?.id) {
   axiosIns.post('my_preferencs/' + myPreferences.value?.id, data)
     .then((res) => {
-      if (res.data.status === 'success') {
-        alert('Preferences updated successfully')
+      alert('Preferences updated successfully')
+      if (res.data.status === true) {
+     //   alert('Preferences updated successfully')
       }
     })
     .catch((err) => {
@@ -216,8 +217,8 @@ const submitPreferences = () => {
   }else {
     axiosIns.post('my_preferencs/save', data)
       .then((res) => {
-        if (res.data.status === 'success') {
-          alert('Preferences updated successfully')
+        if (res.data.status === true) {
+     //     alert('Preferences updated successfully')
         }
       })
       .catch((err) => {

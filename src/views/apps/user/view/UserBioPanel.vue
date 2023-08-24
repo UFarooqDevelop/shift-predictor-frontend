@@ -46,7 +46,7 @@ const isUpgradePlanDialogVisible = ref(false)
           >
             <VImg
               v-if="props.userData?.profile?.picture"
-              :src="props.userData?.profile?.picture"
+              :src="'data:image/jpeg;base64,'+props.userData?.profile?.picture"
             />
             <span
               v-else

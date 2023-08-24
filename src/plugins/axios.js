@@ -3,8 +3,8 @@ import axios from 'axios'
 const axiosIns = axios.create({
 // You can add your headers here
 // ================================
-//baseURL: 'http://127.0.0.1:8000/api/',
-baseURL: 'http://192.168.0.112/api/',
+baseURL: 'http://127.0.0.1:8000/api/',
+//baseURL: 'http://192.168.0.112/api/',
 
 
 // timeout: 1000,
